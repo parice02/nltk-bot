@@ -4,8 +4,10 @@ from datetime import datetime
 
 from nltk_bot import MyChat
 
-def echo(match, resp, *args, **kwargs):
-    print(match, resp)
+
+def echo(match, response):
+    """should return a response"""
+    return f"{match} - {response}"
 
 
 pairs = [

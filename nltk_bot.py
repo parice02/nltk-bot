@@ -36,7 +36,6 @@ class MyChat(Chat):
         self._pairs = [(compile(x, I), y, z) for (x, y, z) in pairs]
         self._reflections = reflections
         self._regex = self._compile_reflections()
-        
 
     def replace_abbreviation(self, statement: str) -> str:
         if not isinstance(statement, str):
@@ -75,7 +74,7 @@ class MyChat(Chat):
 
                 # execute the callback
                 if callback_:
-                    callback_(match.string, response)
+                    response = callback_(match.string, response)
 
                 ##
                 return response
