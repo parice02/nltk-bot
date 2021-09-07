@@ -1,7 +1,8 @@
-# coding: utf8
-from datetime import datetime
-from nltk_bot import MyChat
+# -*- coding: utf8 -*
 
+from datetime import datetime
+
+from nltk_bot import MyChat
 
 def echo(match, resp, *args, **kwargs):
     print(match, resp)
@@ -35,12 +36,16 @@ pairs = [
         [f'il est {datetime.now().time().isoformat(timespec="minutes")}'],
         None,
     ],
-    [r"(.*)", ["apparemment je peux pas t'aider"], None],
+    [
+        r"(.*)",
+        ["apparemment je peux pas t'aider", "je ne suis qu'un simple bot sans IA"],
+        None,
+    ],
 ]
 
 bot = MyChat(pairs=pairs)
 
 
 if __name__ == "__main__":
-    print("A simple chatbot with nlkt. (no ai)\n")
+    print("A simple chatbot with nltk. (no ai)\n")
     bot.converse(quit="quit")
