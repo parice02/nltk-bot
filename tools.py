@@ -1,13 +1,16 @@
-# -*- coding: utf8 -*
-
 from datetime import datetime
-
 from nltk_bot import MyChat
 
 
 def echo(match, response):
     """should return a response"""
     return f"{match} - {response}"
+
+
+def what_time(match, response):
+    """ """
+    time = datetime.now().time().isoformat(timespec="minutes")
+    return response + "\t" + time
 
 
 pairs = [
@@ -35,8 +38,8 @@ pairs = [
     ],
     [
         r"(quelle heure est[- ]il)([\?\. ]?)",
-        [f'il est {datetime.now().time().isoformat(timespec="minutes")}'],
-        None,
+        ["il est"],
+        what_time,
     ],
     [
         r"(.*)",
@@ -45,9 +48,4 @@ pairs = [
     ],
 ]
 
-bot = MyChat(pairs=pairs)
 
-
-if __name__ == "__main__":
-    print("A simple chatbot with nltk. (no ai)\n")
-    bot.converse(quit="quit")

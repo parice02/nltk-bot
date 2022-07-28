@@ -2,8 +2,10 @@
 
 import random
 from re import compile, I
-
 from nltk.chat.util import Chat, reflections
+from string import punctuation
+from copy import copy
+
 
 random.seed(0)
 
@@ -37,17 +39,23 @@ class MyChat(Chat):
         self._reflections = reflections
         self._regex = self._compile_reflections()
 
-    def replace_abbreviation(self, statement: str) -> str:
-        if not isinstance(statement, str):
-            raise TypeError()
+    def clean_statement(self, statement):
+        stm = copy(statement)
+        for char in statement:
+            if char in statement:
+                stm.replace(char, "")
+        return stm
 
-        for word in statement.split():
+    def replace_abbreviation(self, statement):
+        stm = self.clean_statement(statement)
+
+        for word in stm.split():
             if word in abbreviation:
                 statement = statement.replace(word, abbreviation[word])
 
         return statement
 
-    def respond(self, statement: str) -> str:
+    def respond(self, statement):
         """
         Generate a response to the user input.
 
@@ -55,10 +63,13 @@ class MyChat(Chat):
         :param str: The string to be mapped
         :rtype: str
         """
+        if not isinstance(statement, str):
+            raise TypeError("Input is not a string")
 
         # check each pattern
+        response = ""
         statement = self.replace_abbreviation(statement)
-        for (pattern, responses, callback_) in self._pairs:
+        for pattern, responses, callback in self._pairs:
             match = pattern.match(statement)
 
             # did the pattern match?
@@ -73,11 +84,12 @@ class MyChat(Chat):
                     response = response[:-2] + "?"
 
                 # execute the callback
-                if callback_:
-                    response = callback_(match.string, response)
+                if callback:
+                    response = callback(match.string, response)
 
                 ##
-                return response
+                break
+        return response
 
     # Hold a conversation with a chatbot
     def converse(
